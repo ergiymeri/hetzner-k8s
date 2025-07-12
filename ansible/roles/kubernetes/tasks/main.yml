@@ -1,0 +1,22 @@
+---
+- import_tasks: swapoff.yml
+- import_tasks: ipforward.yml
+- import_tasks: docker-install.yml
+- import_tasks: containerd-install.yml
+- import_tasks: cni-plugin.yml
+- import_tasks: k8s-kernel-modules.yml
+- import_tasks: containerd-config.yml
+- import_tasks: k8s-repo.yml
+- import_tasks: k8s-install-components.yml
+- import_tasks: controlplane-components.yml
+  when: "'controlplane' in group_names"
+- import_tasks: init-k8s.yml
+  when: "'controlplane' in group_names"
+- import_tasks: extract-token.yml
+  when: "'controlplane' in group_names"
+- import_tasks: controlplane-join.yml
+  when: "'controlplane' in group_names"
+- import_tasks: install-helm.yml
+  when: "'controlplane' in group_names"
+- import_tasks: worker-join.yml
+  when: "'worker' in group_names"

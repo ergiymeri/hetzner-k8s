@@ -1,0 +1,21 @@
+---
+- name: Set KUBELET_EXTRA_ARGS to use external cloud provider
+  copy:
+    dest: /etc/default/kubelet
+    content: 'KUBELET_EXTRA_ARGS=--cloud-provider=external'
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Re-exec systemd manager configuration
+  command: systemctl daemon-reexec
+
+- name: Reload systemd units
+  systemd:
+    daemon_reload: yes
+
+- name: Restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+    enabled: yes

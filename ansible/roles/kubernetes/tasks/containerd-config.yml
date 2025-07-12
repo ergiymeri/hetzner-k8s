@@ -1,0 +1,16 @@
+---
+- name: Remove existing containerd config
+  file:
+    path: /etc/containerd/config.toml
+    state: absent
+
+- name: Create containerd configuration file
+  copy:
+    src: files/config.toml
+    dest: /etc/containerd/config.toml
+    mode: '0644'
+
+- name: Restart containerd
+  systemd:
+    name: containerd
+    state: restarted

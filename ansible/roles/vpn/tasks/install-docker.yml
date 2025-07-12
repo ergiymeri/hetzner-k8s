@@ -1,0 +1,45 @@
+- name: Install prerequisites for Docker repository
+  apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Docker GPG key
+  get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+
+- name: Get system architecture
+  command: dpkg --print-architecture
+  register: system_arch
+
+- name: Get Ubuntu codename
+  shell: . /etc/os-release && echo "$VERSION_CODENAME"
+  register: ubuntu_codename
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch={{ system_arch.stdout }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ubuntu_codename.stdout }} stable"
+    filename: docker
+
+- name: Update 
+  apt:
+    update_cache: yes
+
+- name: Install all docker components
+  apt:
+    name: 
+      - docker-ce
+      - docker-ce-cli 
+      - containerd.io  
+      - docker-buildx-plugin 
+      - docker-compose-plugin
+    state: present

@@ -1,0 +1,6 @@
+---
+k8s_version: v1.32
+k8s_component_version: 1.32.5-1.1
+cni_plugins_version: v1.7.1
+control_plane_endpoint: 172.16.0.10:6443
+pod_network_cidr: 10.244.0.0/16

@@ -1,0 +1,17 @@
+---
+- name: Join control plane nodes
+  command: >
+    kubeadm join {{ control_plane_endpoint }} 
+    --token {{ hostvars[groups['controlplane'][0]].kubeadm_token }} 
+    --discovery-token-ca-cert-hash sha256:{{ hostvars[groups['controlplane'][0]].ca_cert_hash }} 
+    --control-plane 
+    --certificate-key {{ hostvars[groups['controlplane'][0]].cert_key }}
+  when: not init_k8s_cluster | default(false)
+
+
+- name: Show extracted values
+  debug:
+    msg:
+      - "Token: {{ hostvars[groups['controlplane'][0]].kubeadm_token }}"
+      - "CA Cert Hash: {{ hostvars[groups['controlplane'][0]].ca_cert_hash }}"
+      - "Cert Key: {{ hostvars[groups['controlplane'][0]].cert_key }}"

@@ -1,0 +1,15 @@
+- name: Add CSI Helm repo
+  command: >
+    helm repo add hcloud https://charts.hetzner.cloud
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Update Helm Package
+  command: helm repo update hcloud
+  when: init_k8s_cluster | default(false)
+  run_once: true 
+
+- name: Install CSI Driver
+  command: helm install hcloud-csi hcloud/hcloud-csi -n kube-system
+  when: init_k8s_cluster | default(false)
+  run_once: true

@@ -1,0 +1,3 @@
+---
+- name: Pull kubeadm images
+  command: kubeadm config images pull

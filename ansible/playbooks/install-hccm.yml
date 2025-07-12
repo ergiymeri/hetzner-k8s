@@ -1,0 +1,7 @@
+---
+# This playbook is dedicated to insatll Hetzner Cloud Controller Manager
+- name: Install HCCM on cluster
+  hosts: all
+  become: yes
+  roles: 
+    - hccm

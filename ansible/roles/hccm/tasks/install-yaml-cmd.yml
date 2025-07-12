@@ -1,0 +1,19 @@
+--- 
+- name: Download yq binary
+  get_url:
+    url: https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+    dest: /usr/local/bin/yq
+    mode: '0755'
+
+- name: Add --cloud-provider=external to kube-apiserver.yaml
+  command: >
+    yq eval '.spec.containers[0].command += "--cloud-provider=external"' -i /etc/kubernetes/manifests/kube-apiserver.yaml
+  args:
+    creates: /etc/kubernetes/manifests/kube-apiserver.yaml
+
+- name: Add --cloud-provider=external to kube-controller-manager.yaml
+  command: >
+    yq eval '.spec.containers[0].command += "--cloud-provider=external"' -i /etc/kubernetes/manifests/kube-controller-manager.yaml
+  args:
+    creates: /etc/kubernetes/manifests/kube-controller-manager.yaml
+

@@ -1,0 +1,39 @@
+---
+- name: Configure kernel modules for Kubernetes
+  copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      overlay
+      br_netfilter
+    mode: '0644'
+
+- name: Load overlay module
+  modprobe:
+    name: overlay
+
+- name: Load br_netfilter module
+  modprobe:
+    name: br_netfilter
+
+- name: Configure sysctl for Kubernetes networking
+  copy:
+    dest: /etc/sysctl.d/k8s.conf
+    content: |
+      net.bridge.bridge-nf-call-iptables = 1
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.ipv4.ip_forward = 1
+    mode: '0644'
+
+- name: Apply sysctl settings again
+  command: sysctl --system
+
+
+- name: Verify networking sysctl settings
+  command: sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+
+- name: Load br_netfilter module (redundant but keeping for compatibility)
+  modprobe:
+    name: br_netfilter
+
+- name: Apply sysctl from /etc/sysctl.conf
+  command: sysctl -p /etc/sysctl.conf

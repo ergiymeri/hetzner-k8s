@@ -1,0 +1,6 @@
+---
+location: "nbg1"
+use_private_ip: "true"
+lb_name: "k8s-ingress"
+use_proxyprotocol: "true"
+replica_sets: 3

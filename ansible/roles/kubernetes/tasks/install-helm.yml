@@ -1,0 +1,10 @@
+- name: Download Helm installation script
+  get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /tmp/get-helm-3
+    mode: '0755'
+
+- name: Run Helm installation script
+  command: bash /tmp/get-helm-3
+  args:
+    creates: /usr/local/bin/helm

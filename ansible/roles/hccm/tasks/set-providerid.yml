@@ -1,0 +1,14 @@
+--- 
+- name: Set providerID for each Control Plain node
+  command: >
+    kubectl patch node {{ item.name }}
+    -p '{"spec":{"providerID":"hcloud://{{ item.provider_id }}"}}'
+  loop: "{{ controlplane_nodes }}"
+  when: init_k8s_cluster | default(false)
+
+- name: Set providerID for each Worker node
+  command: >
+    kubectl patch node {{ item.name }}
+    -p '{"spec":{"providerID":"hcloud://{{ item.provider_id }}"}}'
+  loop: "{{ worker_nodes }}"
+  when: init_k8s_cluster | default(false)

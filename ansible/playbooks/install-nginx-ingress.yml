@@ -1,0 +1,7 @@
+---
+# This playbook is going to install nginx-ingress.
+- name: Install Nginx Ingress
+  hosts: all
+  become: yes
+  roles: 
+    - nginx

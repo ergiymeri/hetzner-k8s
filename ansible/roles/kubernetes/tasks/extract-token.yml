@@ -1,0 +1,8 @@
+---
+- name: Extract join components vars
+  set_fact:
+    kubeadm_token: "{{ (kubeadm_init_output.stdout | regex_findall('--token ([^\\s]+)'))[0] }}"
+    cert_key: "{{ (kubeadm_init_output.stdout | regex_findall('--certificate-key ([^\\s]+)'))[0] }}"
+    ca_cert_hash: "{{ (kubeadm_init_output.stdout | regex_findall('--discovery-token-ca-cert-hash sha256:([a-f0-9]+)'))[0] }}"
+  when: init_k8s_cluster | default(false)
+  delegate_to: localhost

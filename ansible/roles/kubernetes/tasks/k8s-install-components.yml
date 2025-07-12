@@ -1,0 +1,17 @@
+---
+- name: Install Kubernetes components
+  apt:
+    name:
+      - kubelet={{ k8s_component_version }}
+      - kubeadm={{ k8s_component_version }}
+      - kubectl={{ k8s_component_version }}
+    state: present
+
+- name: Hold Kubernetes packages
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl

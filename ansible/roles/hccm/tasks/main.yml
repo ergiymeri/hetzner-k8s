@@ -1,0 +1,11 @@
+---
+- import_tasks: external-provider.yml
+- import_tasks: install-yaml-cmd.yml
+  when: "'controlplane' in group_names"
+- import_tasks: set-providerid.yml
+- import_tasks: set-node-role.yml
+  when: "'controlplane' in group_names"
+- import_tasks: install-hccm.yml
+  when: "'controlplane' in group_names"
+- import_tasks: csi-driver-setup.yml
+  when: "'controlplane' in group_names"

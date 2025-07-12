@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+- import_tasks: install-nginx-ingress.yml
+  when: 
+    - "'controlplane' in group_names"
+    - init_k8s_cluster | default(false)
+  

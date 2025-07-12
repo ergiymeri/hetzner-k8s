@@ -1,0 +1,55 @@
+- name: Create Hetzner secret for hcloud CCM
+  command: >
+    kubectl create secret generic hcloud -n kube-system
+    --from-literal=token={{ hcloud_token }}
+    --from-literal=network={{ network_id }}
+  args:
+    creates: /tmp/hcloud-secret-created
+  register: create_secret
+  failed_when: create_secret.rc != 0 and 'AlreadyExists' not in create_secret.stderr
+  changed_when: "'created' in create_secret.stdout"
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Mark that hcloud secret has been created
+  file:
+    path: /tmp/hcloud-secret-created
+    state: touch
+  when: 
+    - create_secret.rc == 0
+    - init_k8s_cluster | default(false)
+  run_once: true  
+
+- name: Add Hetzner Helm repository
+  command: helm repo add hcloud https://charts.hetzner.cloud
+  register: helm_repo
+  changed_when: "'has been added' in helm_repo.stdout or 'updated' in helm_repo.stdout"
+  failed_when: helm_repo.rc != 0 and 'already exists' not in helm_repo.stderr
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Update Hetzner Helm repository
+  command: helm repo update hcloud
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Install hcloud-cloud-controller-manager via Helm
+  command: >
+    helm install hccm hcloud/hcloud-cloud-controller-manager
+    -n kube-system --set networking.enabled=true
+  args:
+    creates: /tmp/hccm-helm-installed
+  register: hccm_install
+  failed_when: hccm_install.rc != 0 and 'cannot re-use a name that is still in use' not in hccm_install.stderr
+  changed_when: "'deployed' in hccm_install.stdout"
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Mark that Helm release is installed
+  file:
+    path: /tmp/hccm-helm-installed
+    state: touch
+  when: 
+    - hccm_install.rc == 0
+    - init_k8s_cluster | default(false)
+  run_once: true

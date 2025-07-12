@@ -1,0 +1,9 @@
+---
+- name: Create containerd configuration file
+  copy:
+    src: files/docker-compose.yml
+    dest: /root/docker-compose.yml
+    mode: '0644'
+    
+- name: Install Wireguard Easy
+  command: docker compose -f /root/docker-compose.yml up -d

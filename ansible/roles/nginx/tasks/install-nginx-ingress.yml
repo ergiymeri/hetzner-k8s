@@ -1,0 +1,22 @@
+---
+- name: Render custom values.yaml from template
+  template:
+    src: values.yaml.j2
+    dest: /tmp/nginx-values.yaml
+
+- name: Add ingress-nginx Helm repo
+  command: helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  args:
+    creates: ~/.cache/helm/repository/ingress-nginx-index.yaml
+
+- name: Update Helm repos
+  command: helm repo update
+
+- name: Create ingress-nginx namespace
+  command: kubectl create ns ingress-nginx
+
+- name: Install nginx-ingress via Helm
+  command: >
+    helm install nginx-ingress ingress-nginx/ingress-nginx \
+      --namespace ingress-nginx \
+      --values /tmp/nginx-values.yaml

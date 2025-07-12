@@ -1,0 +1,8 @@
+---
+# This playbook is dedicated to install WireGuard Easy
+# ref. https://github.com/wg-easy/wg-easy
+- name: Install WireGuard VPN
+  hosts: all
+  become: yes
+  roles: 
+    - vpn

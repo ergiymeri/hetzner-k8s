@@ -1,0 +1,6 @@
+---
+- name: Join worker nodes
+  command: >
+    kubeadm join {{ control_plane_endpoint }} 
+    --token {{ hostvars[groups['controlplane'][0]].kubeadm_token }} 
+    --discovery-token-ca-cert-hash sha256:{{ hostvars[groups['controlplane'][0]].ca_cert_hash }} 

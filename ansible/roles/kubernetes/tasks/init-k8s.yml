@@ -1,0 +1,44 @@
+- name: Initialize Kubernetes control plane
+  command: >
+    kubeadm init
+    --control-plane-endpoint "{{ control_plane_endpoint }}"
+    --upload-certs
+    --pod-network-cidr={{ pod_network_cidr }}
+  register: kubeadm_init_output
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+- name: Create .kube directory for root
+  file:
+    path: /root/.kube
+    state: directory
+    mode: '0755'
+  run_once: true
+
+- name: Copy admin.conf to .kube/config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0644'
+  run_once: true
+
+
+- name: Set KUBECONFIG environment variable
+  lineinfile:
+    path: /root/.bashrc
+    line: 'export KUBECONFIG=/etc/kubernetes/admin.conf'
+    create: yes
+  run_once: true
+
+- name: Apply Calico network plugin
+  shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  when: init_k8s_cluster | default(false)
+  run_once: true
+
+
+

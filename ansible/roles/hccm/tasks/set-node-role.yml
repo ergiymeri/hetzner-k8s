@@ -1,0 +1,6 @@
+---
+- name: Set for each node worker role on kubernetes
+  command: > 
+    kubectl label node {{ item.name }} node-role.kubernetes.io/worker=
+  loop: "{{ worker_nodes }}"
+  when: init_k8s_cluster | default(false)

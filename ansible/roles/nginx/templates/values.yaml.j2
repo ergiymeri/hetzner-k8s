@@ -1,0 +1,11 @@
+controller:
+  replicaCount: {{ replica_sets }}
+
+  service:
+    annotations:
+      load-balancer.hetzner.cloud/location: "{{ location }}"
+      load-balancer.hetzner.cloud/use-private-ip: "{{ use_private_ip }}"
+      load-balancer.hetzner.cloud/name: "{{ lb_name }}"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "{{ use_proxyprotocol }}"
+    type: LoadBalancer
+    externalTrafficPolicy: Local
