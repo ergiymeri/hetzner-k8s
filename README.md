@@ -111,6 +111,10 @@ terraform plan
 terraform apply
 ```
 
+#### ✅ After some minutes everything it will be ready.
+
+![Hetzner Cluster Ready](./images/cluster-ready.png)
+
 ### WireGuard Setup
 
 Once the cluster is deployed, use `wg-easy` to set up and manage VPN access:
