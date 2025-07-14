@@ -1,5 +1,5 @@
 # Hetzner Cloud configuration
-hcloud_token = "your-api-token"
+hcloud_token = "dVqe3WY0dPFaeu2zxh4MbD9MCi1n1xSBiO7951NH09HE4lh2YxwQ8eVybqGjjpoQ"
 
 # Cluster configuration
 cluster_name     = "hcloud-k8s-cluster"
