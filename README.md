@@ -13,7 +13,7 @@ This project automates the provisioning of a highly available and secure Kuberne
    - [ Step 3: Deploy Infrastructure](#deploy-infrastructure)
 4. [WireGuard Setup](#wireguard-setup)
 5. [Load Balancer & Ingress](#load-balancer--ingress)
-
+6. [Conclusion](#conclusion)
 
 
 ## Prerequisites
@@ -128,6 +128,8 @@ Once the cluster is deployed, use `wg-easy` to set up and manage VPN access:
 4. From the dashboard, you can add VPN clients by clicking **"Create new client"**, assigning a name, and downloading their configuration.
 5. Import the configuration into your WireGuard client on desktop or mobile to connect.
 
+Ref: [WireGuard Easy](https://github.com/wg-easy/wg-easy)
+
 ### Load Balancer & Ingress
 
 #### Ingress Load Balancer
@@ -147,3 +149,7 @@ A Hetzner Load Balancer is also provisioned to balance traffic between all contr
 ![Control Plane Load Balancer](./images/controlplane-lb.png)
 
 This load balancer ensures high availability and reliability for Kubernetes control plane operations.
+
+### Conclusion
+
+By the end of this setup, you'll have a production-ready, highly available Kubernetes cluster on Hetzner Cloud. Secure access is provided via WireGuard VPN, and traffic to your applications is managed through an NGINX ingress controller exposed by a public load balancer. The control plane is also load-balanced, ensuring stable and resilient cluster operations.
