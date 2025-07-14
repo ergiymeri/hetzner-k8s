@@ -7,12 +7,12 @@ This project automates the provisioning of a highly available and secure Kuberne
 
 1. [Prerequisites](#prerequisites)
 2. [Architecture](#architecture)
-3. [Installation & Setup](#install)
-   - [ Step 1: Create a Hetzner API Token](#-step-1-create-a-hetzner-api-token)
-   - [ Step 2: Generate and Add SSH Key](#-step-2-generate-and-add-ssh-key)
-   - [ Step 3: Deploy Infrastructure](#-step-3-deploy-infrastructure)
-4. [WireGuard Setup](#wireGuard-setup)
-
+3. [Installation & Setup](#installation--setup)
+   - [ Step 1: Create a Hetzner API Token](#create-a-hetzner-api-token)
+   - [ Step 2: Generate and Add SSH Key](#generate-and-add-ssh-key)
+   - [ Step 3: Deploy Infrastructure](#deploy-infrastructure)
+4. [WireGuard Setup](#wireguard-setup)
+5. [Load Balancer & Ingress](#load-balancer--ingress)
 
 
 
@@ -34,7 +34,9 @@ The following diagram illustrates the high-level architecture of the Kubernetes 
 
 
 Kubernetes Cluster HA Architechtur:
-![HA K8S](./images/k8s-ha.svg)
+![HA K8S](./images/ha-k8s.png)
+
+`Image Ref: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/`
 
 ### Key Components:
 
@@ -50,6 +52,8 @@ Kubernetes Cluster HA Architechtur:
 ## Installation & Setup
 
 ### Create a Hetzner API Token
+
+![Hetzner API TOKEN](./images/generate-api.png)
 
 1. Log in to the [Hetzner Cloud Console](https://console.hetzner.cloud/)
 2. Go to **Access > API Tokens**
@@ -119,3 +123,23 @@ Once the cluster is deployed, use `wg-easy` to set up and manage VPN access:
 3. Click **Continue** to proceed with the server configuration.
 4. From the dashboard, you can add VPN clients by clicking **"Create new client"**, assigning a name, and downloading their configuration.
 5. Import the configuration into your WireGuard client on desktop or mobile to connect.
+
+### Load Balancer & Ingress
+
+#### Ingress Load Balancer
+The ingress controller is deployed behind a public load balancer using Hetzner Cloud Load Balancer service. After successful deployment:
+
+- You will see a public IP assigned to the load balancer
+- This IP routes traffic to the internal IP (e.g., `172.16.0.2`) of your `nginx-ingress` service
+
+![Nginx Ingress Controller](./images/k8s-ingress.png)
+
+You can now use the public IP to route traffic into your cluster using DNS records. Make sure to configure your ingress rules and TLS certificates properly (e.g., with cert-manager).
+
+#### Control Plane Load Balancer
+
+A Hetzner Load Balancer is also provisioned to balance traffic between all control plane nodes. It provides a stable endpoint for the Kubernetes API (on port 6443) and forwards traffic to the internal control plane IPs.
+
+![Control Plane Load Balancer](./images/controlplane-lb.png)
+
+This load balancer ensures high availability and reliability for Kubernetes control plane operations.
