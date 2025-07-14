@@ -65,6 +65,7 @@ Kubernetes Cluster HA Architechtur:
 
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
+
 ```
 
 2. Move your keys to the `keys/` directory in this project:
@@ -73,6 +74,11 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 /keys
   └── my-key       (private key)
   └── my-key.pub   (public key)
+```
+
+Don't forget to give required permission 
+```bash
+chmod 600 ./keys/*
 ```
 
 3. In `terraform.tfvars`, set the SSH key name:
