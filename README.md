@@ -33,7 +33,7 @@ The following diagram illustrates the high-level architecture of the Kubernetes 
 ![Hetzner Kubernetes Architecture](./images/hcloud-k8s.jpg)
 
 
-Kubernetes Cluster HA Architechtur:
+Kubernetes Cluster HA Architecture:
 ![HA K8S](./images/ha-k8s.png)
 
 `Image Ref: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/`
